@@ -55,7 +55,7 @@ jobs:
         context: ./backend
         file: ./backend/Dockerfile
         push: true
-        tags: ${{ secrets.AWS_ACCOUNT_ID }}.dkr.ecr.${{ secrets.AWS_REGION }}.amazonaws.com/group-3-ecr-netflix-clone:${{ github.sha }}
+        tags: ${{ secrets.AWS_ACCOUNT_ID }}.dkr.ecr.us-east-1.amazonaws.com/group-3-ecr-netflix-clone:${{ github.sha }}
 
     - uses: act10ns/slack@v2
       with:
@@ -74,18 +74,18 @@ jobs:
         terraform apply -auto-approve tfplan
         echo "::set-output name=cluster_name::$(terraform output -raw cluster_name)"
       env:
-        AWS_REGION: ${{ secrets.AWS_REGION }}
+        AWS_REGION: us-east-1
         AWS_ACCESS_KEY_ID: ${{ secrets.AWS_ACCESS_KEY_ID }}
         AWS_SECRET_ACCESS_KEY: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
         TF_VAR_tmdb_api_key: ${{ secrets.TMDB_API_KEY }}
-        TF_VAR_aws_region: ${{ secrets.AWS_REGION }}
+        TF_VAR_aws_region: us-east-1
 
     - name: Generate kubeconfig
       if: github.ref == 'refs/heads/dev' || github.ref == 'refs/heads/stage' || github.ref == 'refs/heads/prod'
       run: |
-        aws eks update-kubeconfig --name ${{ steps.terraform.outputs.cluster_name }} --region ${{ secrets.AWS_REGION }} --kubeconfig /home/runner/.kube/config
+        aws eks update-kubeconfig --name ${{ steps.terraform.outputs.cluster_name }} --region us-east-1 --kubeconfig /home/runner/.kube/config
       env:
-        AWS_REGION: ${{ secrets.AWS_REGION }}
+        AWS_REGION: us-east-1
         AWS_ACCESS_KEY_ID: ${{ secrets.AWS_ACCESS_KEY_ID }}
         AWS_SECRET_ACCESS_KEY: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
 
@@ -94,9 +94,9 @@ jobs:
       run: |
         aws configure set aws_access_key_id ${{ secrets.AWS_ACCESS_KEY_ID }}
         aws configure set aws_secret_access_key ${{ secrets.AWS_SECRET_ACCESS_KEY }}
-        aws configure set region ${{ secrets.AWS_REGION }}
+        aws configure set region us-east-1
       env:
-        AWS_REGION: ${{ secrets.AWS_REGION }}
+        AWS_REGION: us-east-1
         AWS_ACCESS_KEY_ID: ${{ secrets.AWS_ACCESS_KEY_ID }}
         AWS_SECRET_ACCESS_KEY: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
 
