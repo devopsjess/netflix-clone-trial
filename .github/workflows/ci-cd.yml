@@ -12,7 +12,7 @@ on:
 
 env:
   SLACK_WEBHOOK_URL: ${{ secrets.SLACK_WEBHOOK_URL }}
-
+  
 jobs:
   build:
     runs-on: ubuntu-latest
@@ -44,7 +44,7 @@ jobs:
     - uses: act10ns/slack@v2
       with:
         status: starting
-        channel: '#meetups'
+        channel: '#notifications'
         message: Starting Docker Build image...
       if: always()
 
@@ -60,7 +60,7 @@ jobs:
     - uses: act10ns/slack@v2
       with:
         status: starting
-        channel: '#meetups'
+        channel: '#notifications'
         message: Starting Terraform init and apply...
       if: always()
 
@@ -103,7 +103,7 @@ jobs:
     - uses: act10ns/slack@v2
       with:
         status: starting
-        channel: '#meetups'
+        channel: '#notifications'
         message: Starting Deployment to EKS...
       if: always()
 
@@ -117,7 +117,7 @@ jobs:
 
     - uses: act10ns/slack@v2
       with:
-        channel: '#meetups'
+        channel: '#notifications'
         status: ${{ job.status }}
         steps: ${{ toJson(steps) }}
       if: always()
